@@ -9,7 +9,6 @@
 int initialize(int **a);
 int freeArray(int *a);
 void printArray(int *a);
-
 int selectionSort(int *a);
 int insertionSort(int *a);
 int bubbleSort(int *a);
@@ -110,7 +109,7 @@ int main()
 	return 1;
 }
 
-int initialize(int** a)
+int initialize(int** a) //함수 값을 랜덤으로 배정해주는 함수 정렬된 배열을 랜덤화할때도 사용된다.
 {
 	int *temp = NULL;
 
@@ -128,20 +127,20 @@ int initialize(int** a)
 	return 0;
 }
 
-int freeArray(int *a)
+int freeArray(int *a)//프로그램이 다 끝났을때 동적할당을 해제해주는 함수
 {
 	if(a != NULL)
 		free(a);
 	return 0;
 }
 
-void printArray(int *a)
+void printArray(int *a) //배열안에 어떤 값이 들어있는지 알려주는 함수
 {
 	if (a == NULL) {
 		printf("nothing to print.\n");
 		return;
 	}
-	for(int i = 0; i < MAX_ARRAY_SIZE; i++)
+	for(int i = 0; i < MAX_ARRAY_SIZE; i++) 
 		printf("a[%02d] ", i);
 	printf("\n");
 	for(int i = 0; i < MAX_ARRAY_SIZE; i++)
@@ -150,31 +149,31 @@ void printArray(int *a)
 }
 
 
-int selectionSort(int *a)
+int selectionSort(int *a) //선택 정렬 가장 작은 데이터를 찾아 가장 앞의 데이터와 교환해나간다.
 {
-	int min;
-	int minindex;
-	int i, j;
+	int min; //작은값을 저장할 변수
+	int minindex; //작은값의 주소를 저장할 변수
+	int i, j; //for문을 돌리기위한 i,j
 
 	printf("Selection Sort: \n");
 	printf("----------------------------------------------------------------\n");
 
-	printArray(a);
+	printArray(a);//원래 배열에 어떤값이 있는지 출력해주는 함수
 
-	for (i = 0; i < MAX_ARRAY_SIZE; i++)
+	for (i = 0; i < MAX_ARRAY_SIZE; i++)//가장 작은 값을 앞으로 옮긴다음 그 옮긴 수 다음부터 비교해감
 	{
-		minindex = i;
-		min = a[i];
-		for(j = i+1; j < MAX_ARRAY_SIZE; j++)
+		minindex = i; //i를 가장 작은 값의 주소로 두고
+		min = a[i];//a[i]를 작은값에다가 저장
+		for(j = i+1; j < MAX_ARRAY_SIZE; j++)//j를 증가시키면서 //(j=i+1)인 이유는 가장 i까지는 정렬이 되어있기 때문
 		{
-			if (min > a[j])
+			if (min > a[j])//min값이 a[j]값보다 클경우
 			{
-				min = a[j];
-				minindex = j;
+				min = a[j]; //min값에 a[j]값을 넣어준다
+				minindex = j; //가장 작은수 주소를 j로 해준다
 			}
 		}
-		a[minindex] = a[i];
-		a[i] = min;
+		a[minindex] = a[i];//비교되서 더큰수인 a[i]를 빈칸이될 a[minindex]에 넣어준다.
+		a[i] = min; //원래 a[i]가 있던곳에 비교해서 가장 작은수를 넣어준다.
 	}
 
 	printf("----------------------------------------------------------------\n");
@@ -182,25 +181,25 @@ int selectionSort(int *a)
 	return 0;
 }
 
-int insertionSort(int *a)
+int insertionSort(int *a) //정렬된 앞부분으로 원소를 옮기는 방법
 {
-	int i, j, t;
+	int i, j, t; 
 
 	printf("Insertion Sort: \n");
 	printf("----------------------------------------------------------------\n");
 
 	printArray(a);
 
-	for(i = 1; i < MAX_ARRAY_SIZE; i++)
+	for(i = 1; i < MAX_ARRAY_SIZE; i++)//정렬되지 않은 배열값을 i개의 정렬된 리스트에 넣어서 i+1인 정렬된 배열을 만들어가는 과정
 	{
-		t = a[i];
-		j = i;
-		while (a[j-1] > t && j > 0)
+		t = a[i]; //t에 a[i]값을 넣어주고
+		j = i; //j에 i값을 넣어준다
+		while (a[j-1] > t && j > 0)//a[j]를 앞으로 이동시킬 것이다 자신보다 작은수가 나오기 전까지
 		{
-			a[j] = a[j-1];
-			j--;
+			a[j] = a[j-1];//앞으로 이동하며 값 교환
+			j--;//인덱스 감소
 		}
-		a[j] = t;
+		a[j] = t;//a[i]값을 변화한 a[j]에 넣어준다.
 	}
 
 	printf("----------------------------------------------------------------\n");
@@ -209,7 +208,7 @@ int insertionSort(int *a)
 	return 0;
 }
 
-int bubbleSort(int *a)
+int bubbleSort(int *a)//주변 데이터중 가장 큰 데이터를 뒤로 보내는것
 {
 	int i, j, t;
 
@@ -218,15 +217,17 @@ int bubbleSort(int *a)
 
 	printArray(a);
 
-	for(i = 0; i < MAX_ARRAY_SIZE; i++)
+	for(i = 0; i < MAX_ARRAY_SIZE; i++)//i값을 증가시키면서
 	{
-		for (j = 0; j < MAX_ARRAY_SIZE; j++)
+		for (j = 1; j < MAX_ARRAY_SIZE+1; j++) //j값을 증가시키면서
+		//원래코드에서 j를 0부터 실행시켜버렸기때문에 j[-1]값을 가져와이상한 값을 가져왔고
+		//정렬이후에 가장 뒷값이 튀는 오류가 발생해서 해결했다.(보고서 첨수)
 		{
-			if (a[j-1] > a[j])
+			if (a[j-1] > a[j])//j번째에 있는 값이 그 앞값보다 작다면
 			{
-				t = a[j-1];
-				a[j-1] = a[j];
-				a[j] = t;
+				t = a[j-1]; //t에 앞값 저장
+				a[j-1] = a[j]; //j번재 값을 앞으로 이동
+				a[j] = t; //앞값을 뒤로이동
 			}
 		}
 	}
@@ -237,7 +238,7 @@ int bubbleSort(int *a)
 	return 0;
 }
 
-int shellSort(int *a)
+int shellSort(int *a)//insertionSort의 단점을 보완하기위해 만듬
 {
 	int i, j, k, h, v;
 
@@ -246,19 +247,19 @@ int shellSort(int *a)
 
 	printArray(a);
 
-	for (h = MAX_ARRAY_SIZE/2; h > 0; h /= 2)
+	for (h = MAX_ARRAY_SIZE/2; h > 0; h /= 2) //배열사이즈를 (현재 12)를 반으로 나눈 h=6이고그다음은 3 이런식으로 2로 나누변서 반복
 	{
-		for (i = 0; i < h; i++)
+		for (i = 0; i < h; i++)//i를 h가되기 전까지 증가시키면서
 		{
-			for(j = i + h; j < MAX_ARRAY_SIZE; j += h)
+			for(j = i + h; j < MAX_ARRAY_SIZE; j += h)//h만큼 떨어진 값이랑 비교하기위해
 			{
-				v = a[j];
-				k = j;
-				while (k > h-1 && a[k-h] > v)
+				v = a[j]; //v에 j번째 값을 넣어주고
+				k = j; //k에 j값을 넣어준다
+				while (k > h-1 && a[k-h] > v)//shell을 초기화지않고 shell에서 h만큼 앞에있는 값보다 j번재 값이 작으면
 				{
-					a[k] = a[k-h];
+					a[k] = a[k-h];//서로 위치를 바꿔준다
 					k -= h;
-				}
+				}//어느정도 정렬이되면서 h가 작아지다가 1이되면 삽입정렬이되서 정렬을 완료한다
 				a[k] = v;
 			}
 		}
@@ -269,7 +270,7 @@ int shellSort(int *a)
 	return 0;
 }
 
-int quickSort(int *a, int n)
+int quickSort(int *a, int n)//기준 값을 중심으로 왼쪽과 오른쪽 부분집합으로 분할해서 정렬
 {
 	int v, t;
 	int i, j;
