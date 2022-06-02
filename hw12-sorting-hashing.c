@@ -247,7 +247,7 @@ int shellSort(int *a)//insertionSort의 단점을 보완하기위해 만듬
 
 	printArray(a);
 
-	for (h = MAX_ARRAY_SIZE/2; h > 0; h /= 2) //배열사이즈를 (현재 12)를 반으로 나눈 h=6이고그다음은 3 이런식으로 2로 나누변서 반복
+	for (h = MAX_ARRAY_SIZE/2; h > 0; h /= 2) //배열사이즈를 (현재 13)를 반으로 나눈 h=6이고그다음은 3 이런식으로 2로 나누변서 반복
 	{
 		for (i = 0; i < h; i++)//i를 h가되기 전까지 증가시키면서
 		{
@@ -272,42 +272,42 @@ int shellSort(int *a)//insertionSort의 단점을 보완하기위해 만듬
 
 int quickSort(int *a, int n)//기준 값을 중심으로 왼쪽과 오른쪽 부분집합으로 분할해서 정렬
 {
-	int v, t;
-	int i, j;
+	int v, t;//피봇과 탬프
+	int i, j;//인덱스 값들
 
-	if (n > 1)
+	if (n > 1) //n이 1보다 클때 이때 n은 MAXARRAY값인 10이 들어온다
 	{
-		v = a[n-1];
-		i = -1;
-		j = n - 1;
+		v = a[n-1];//피봇은 배열의 가장 마지막에있는것
+		i = -1;//i는 -1
+		j = n - 1;//j는 배열의 가장 마지막
 
-		while(1)
+		while(1)//break문이 나올때까지 반복
 		{
-			while(a[++i] < v);
-			while(a[--j] > v);
+			while(a[++i] < v);//부분집합의 왼쪽의 인댁스를 증가시키면서 피봇보다는 작을떄동안
+			while(a[--j] > v);//부분집합의 오른쪽의 인댁스를 감소시키면서 피봇보다는 클동안
 
-			if (i >= j) break;
-			t = a[i];
-			a[i] = a[j];
-			a[j] = t;
+			if (i >= j) break; //i랑j가 같아지거나 i가 j를 초과할때까지 반복하라는뜻
+			t = a[i];//t에 a[i]를 넣어주고
+			a[i] = a[j];//a[i]랑 a[j]를 교환하고
+			a[j] = t;//a[j]에 a[i]에 원래있던 값을 넣어준다.
 		}
-		t = a[i];
+		t = a[i];//피봇을 넣어주고교환을 해줌
 		a[i] = a[n-1];
 		a[n-1] = t;
 
-		quickSort(a, i);
-		quickSort(a+i+1, n-i-1);
+		quickSort(a, i);//i를 피봇으로 sort
+		quickSort(a+i+1, n-i-1);//i를 중심으로 오른족 왼쪽을 나누면서 정렬
 	}
 
 
 	return 0;
 }
 
-int hashCode(int key) {
+int hashCode(int key) { //인덱스값이 초과되지 않게 나머지를 계산해주는 함수
    return key % MAX_HASH_TABLE_SIZE;
 }
 
-int hashing(int *a, int **ht)
+int hashing(int *a, int **ht)//문자열을 빠르게 찾을수 있도록 변환하는 것
 {
 	int *hashtable = NULL;
 
@@ -320,56 +320,56 @@ int hashing(int *a, int **ht)
 	}
 
 	for(int i = 0; i < MAX_HASH_TABLE_SIZE; i++)
-		hashtable[i] = -1;
+		hashtable[i] = -1;//해시 테이블을 -1로 초기화시킴
 
 	/*
 	for(int i = 0; i < MAX_HASH_TABLE_SIZE; i++)
 		printf("hashtable[%d] = %d\n", i, hashtable[i]);
 	*/
 
-	int key = -1;
+	int key = -1; //변수들 지정후 -1로 초기화
 	int hashcode = -1;
 	int index = -1;
 	for (int i = 0; i < MAX_ARRAY_SIZE; i++)
 	{
-		key = a[i];
-		hashcode = hashCode(key);
+		key = a[i];//배열의 값을 받아오고
+		hashcode = hashCode(key); //값을 인덱스화함
 		/*
 		printf("key = %d, hashcode = %d, hashtable[%d]=%d\n", key, hashcode, hashcode, hashtable[hashcode]);
 		*/
-		if (hashtable[hashcode] == -1)
+		if (hashtable[hashcode] == -1)//hashtable의 hashcode번째가 비었다면 그곳에 바로 key값을 넣어준다.
 		{
-			hashtable[hashcode] = key;
+			hashtable[hashcode] = key;//값넣어주기
 		} else 	{
 
-			index = hashcode;
+			index = hashcode;//hashcode를 index에 넣고
 
-			while(hashtable[index] != -1)
+			while(hashtable[index] != -1) //인덱스가 비었을떄까지 index를 증가시키면서 찾는다.
 			{
 				index = (++index) % MAX_HASH_TABLE_SIZE;
 				/*
 				printf("index = %d\n", index);
 				*/
 			}
-			hashtable[index] = key;
+			hashtable[index] = key;//빈곳을 찾았으면 값을 넣어준다.
 		}
 	}
 
 	return 0;
 }
 
-int search(int *ht, int key)
+int search(int *ht, int key)//정렬된 값 찾기
 {
-	int index = hashCode(key);
+	int index = hashCode(key);//index에 찾아올 key값 넣어준고
 
-	if(ht[index] == key)
+	if(ht[index] == key)//인덱스가 key값이면 바로 출력하면되고
 		return index;
 
-	while(ht[++index] != key)
+	while(ht[++index] != key)//아닐경우에 index를 증가시키면서 찾는다
 	{
 		index = index % MAX_HASH_TABLE_SIZE;
 	}
-	return index;
+	return index;//찾은 인덱스 반환
 }
 
 
